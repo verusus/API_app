@@ -58,38 +58,19 @@ public class UserServiceTest {
         Assertions.assertEquals("number of users exceeded the Max (100 000)!", thrown.getMessage());
     }
 
-    @Test
-    public void getUserTestEmail_ok() throws Exception {
-        Assertions.assertTrue(userService.getUsers(1).get(0).getEmail().contains("@"));
-    }
+
     @Test
     public void getUserTestAllEmail_ok() throws Exception {
-//        Assertions.assertTrue(userService.getUsers(3).get(0).getEmail().contains("@"));
-//        Assertions.assertTrue(userService.getUsers(3).get(0).getEmail().contains("@"));
+
         String regex = "^(.+)@(.+)$";
         Pattern pattern = Pattern.compile(regex);
         for(User user : userService.getUsers(3)){
             //Create instance of matcher
             Matcher matcher = pattern.matcher(user.getEmail());
-            System.out.println(user.getEmail() +" : "+ matcher.matches()+"\n");
             Assertions.assertTrue(matcher.matches());
         }
     }
 
-    @Test
-    public void getUserTestAllEmail_ko() throws Exception {
-//        Assertions.assertTrue(userService.getUsers(3).get(0).getEmail().contains("@"));
-//        Assertions.assertTrue(userService.getUsers(3).get(0).getEmail().contains("@"));
-        String regex = "^(.+)!(.+)$";
-        Pattern pattern = Pattern.compile(regex);
-        for(User user : userService.getUsers(3)){
-            //Create instance of matcher
-            Matcher matcher = pattern.matcher(user.getEmail());
-            System.out.println(user.getEmail() +" : "+ matcher.matches()+"\n");
-            System.out.println(user.getPassword() +" : "+ matcher.matches()+"\n");
-            Assertions.assertFalse(matcher.matches());
-        }
-    }
 
     @Test
     public void getUserTestAllAttributes_notNull_ok() throws Exception {
@@ -108,17 +89,21 @@ public class UserServiceTest {
         userService.getUsers(3).forEach(user -> Assertions.assertNotNull(user.getEmail()));
         userService.getUsers(3).forEach(user -> Assertions.assertNotNull(user.getPassword()));
         userService.getUsers(3).forEach(user -> Assertions.assertNotNull(user.getRole()));
+        userService.getUsers(3).forEach(user -> Assertions.assertTrue(user.getRole()=="admin"||user.getRole()=="user"));
     }
 
     @Test
     public void getUserTestPasswordStrength_ok() throws Exception {
-
-        userService.getUsers(10).forEach(user -> Assertions.assertTrue(user.getPassword().length()>7));
-        Pattern lowerCasePatten = Pattern.compile("[a-z ]");
-        Pattern digitCasePatten = Pattern.compile("[0-9 ]");
-
-        userService.getUsers(10).forEach(user -> Assertions.assertTrue(lowerCasePatten.matcher(user.getPassword()).find()));
-        userService.getUsers(10).forEach(user -> Assertions.assertTrue(digitCasePatten.matcher(user.getPassword()).find()));
-
+        Pattern patten = Pattern.compile("[a-zA-Z0-9]{8,}");
+        userService.getUsers(10).forEach(user -> Assertions.assertTrue(patten.matcher(user.getPassword()).find()));
     }
+
+    @Test
+    public void getUserTestRealNames_ok() throws Exception {
+        Pattern patten = Pattern.compile("[a-zA-Z0-9]{8,}");
+        userService.getUsers(10).forEach(user -> Assertions.assertTrue(patten.matcher(user.getPassword()).find()));
+    }
+
+
+
 }

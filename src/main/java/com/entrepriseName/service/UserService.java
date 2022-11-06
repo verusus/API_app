@@ -36,7 +36,7 @@ public class UserService {
             .setMobile(faker.phoneNumber().phoneNumber())
             .setUsername(faker.name().username())
             .setEmail(faker.internet().emailAddress())
-            .setPassword(faker.internet().password())
+            .setPassword(faker.internet().password(8,12,true, false, true))
             .setRole(faker.options().nextElement(Arrays.asList("admin", "user")));
 
             users.add(user);
