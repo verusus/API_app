@@ -100,9 +100,12 @@ public class UserServiceTest {
 
     @Test
     public void getUserTestRealNames_ok() throws Exception {
-        Pattern patten = Pattern.compile("[a-zA-Z0-9]{8,}");
-        userService.getUsers(10).forEach(user -> Assertions.assertTrue(patten.matcher(user.getPassword()).find()));
+        Pattern patten = Pattern.compile("[a-zA-Z]{2,20}"); // no numbers || special characters are allowed
+
+        userService.getUsers(10).forEach(user -> Assertions.assertTrue(patten.matcher(user.getFirstName()).find()));
+        userService.getUsers(10).forEach(user -> Assertions.assertTrue(patten.matcher(user.getLastName()).find()));
     }
+
 
 
 
